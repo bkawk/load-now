@@ -1,0 +1,87 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<!--<link rel="import" href="../polymer/lib/elements/dom-if.html">-->
+<!--<link rel="import" href="../polymer/lib/elements/dom-repeat.html">-->
+
+<!--
+`load-now`
+
+
+@demo demo/index.html
+-->
+
+<dom-module id="load-now">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+  </template>
+
+  <script>
+    /** @polymerElement */
+    class LoadNow extends Polymer.Element {
+      static get is() { return 'load-now'; }
+      static get properties() {
+        return {
+          finishedLoading: {
+            type: Boolean,
+            value: false,
+            notify: true,
+          },
+          delayTime: {
+            type: Number
+          },
+          loadHref: {
+            type: String
+          },
+          loadSrc: {
+            type: String
+          },
+          loadNow:{
+            type: Boolean,
+            value: false,
+            observer: '_loadNow' 
+          }
+        };
+      }
+
+    _loadNow(){
+      if(this.loadHref){
+        if(this.delayTime){
+          setTimeout(() =>{ 
+            this._loadHref(this.loadHref)
+          }, this.delayTime*1000);
+        }else{
+          this._loadHref(this.loadHref)
+        }
+      }
+      if(this.loadSrc){
+        if(this.delayTime){
+          setTimeout(() =>{ 
+            this._loadSrc(this.loadSrc)
+          }, this.delayTime*1000);
+        }else{
+          this._loadSrc(this.loadSrc)
+        }
+      }
+    }
+
+    _loadHref(href){
+        var loadHref = document.createElement('link');
+        loadHref.href = href;
+        loadHref.rel = 'import';
+        loadHref.onload = this.finishedLoading = true
+        document.head.appendChild(loadHref);
+    }
+    _loadSrc(src){
+        var loadSrc = document.createElement('script');
+        loadSrc.async = true;
+        loadSrc.src = src;
+        loadSrc.onload = this.finishedLoading = true
+        document.head.appendChild(loadSrc);
+    }
+
+    } window.customElements.define(LoadNow.is, LoadNow);
+  </script>
+</dom-module>
