@@ -38,6 +38,11 @@
           loadSrc: {
             type: String
           },
+          loadingError:{
+            type: Boolean,
+            value: false,
+            notify: true, 
+          },
           loadNow:{
             type: Boolean,
             value: false,
@@ -72,6 +77,7 @@
         loadHref.href = href;
         loadHref.rel = 'import';
         loadHref.onload = this.finishedLoading = true
+        loadHref.onerror = this.loadingError = true
         document.head.appendChild(loadHref);
     }
     _loadSrc(src){
@@ -79,6 +85,7 @@
         loadSrc.async = true;
         loadSrc.src = src;
         loadSrc.onload = this.finishedLoading = true
+        loadHref.onerror = this.loadingError = true
         document.head.appendChild(loadSrc);
     }
 
